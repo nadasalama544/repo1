@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
  
 jobs:
-    run-tests:
+  run-tests:
     # if: github.event.pull_request.merged == true 
     runs-on: ubuntu-latest
 
