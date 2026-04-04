@@ -37,6 +37,7 @@ jobs:
 
       - name: Show Runner time
         run: date
+        run: date
         
       - name: Run tests
         run: python -m unittest discover -s tests -v
