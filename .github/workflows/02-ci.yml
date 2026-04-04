@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
  
 jobs:
-  run-tests: # تأكد أن هذه الكلمة تبدأ بمحاذاة jobs
+  run-tests: 
     if: github.event.pull_request.merged == true 
     runs-on: ubuntu-latest
 
