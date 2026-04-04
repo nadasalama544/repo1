@@ -17,10 +17,6 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
-
-  run-tests:
-    # if: github.event.pull_request.merged == true 
-    runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
