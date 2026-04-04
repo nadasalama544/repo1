@@ -1,5 +1,4 @@
 name: 02 CI Workflow
-
 on:
   pull_request:
     types: [closed]
