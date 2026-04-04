@@ -1,7 +1,4 @@
-# This is the first real CI workflow in the course.
-# It verifies a change by running tests on a fresh runner.
 name: 02 CI Workflow
-
 on:
   # pull_request:
   #   types: [closed]
@@ -12,33 +9,38 @@ on:
   workflow_dispatch:
  
 jobs:
+
+  run-tests: 
+    if: github.event.pull_request.merged == true 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
   run-tests:
     # if: github.event.pull_request.merged == true 
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out repository
-        # Download the repository contents onto the runner.
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        # Prepare Python on the runner. This does not change the student laptop.
-        uses: actions/setup-python@v6
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
       - name: Run tests
-        # This is the key verification step in the CI workflow.
-        run: python -m unittest discover -s tests -v- 
+        run: python -m unittest discover -s tests -v
 
       - name: List repo files
-        run: ls -R - 
+        run: ls -R
 
       - name: Show Python version
         run: python --version
 
       - name: Show Runner time
         run: date
-
+        
       - name: Run tests
         run: python -m unittest discover -s tests -v
