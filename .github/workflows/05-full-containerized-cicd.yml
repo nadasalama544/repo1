@@ -1,16 +1,14 @@
-#name: 04 Deploy Workflow
+name: 04 Deploy Workflow on Push
 
-# Trigger:build workflow
+# Trigger: 
 on:
-  
   push:
     branches:
-      - '**' 
+      - '**'   # 
 
 env:
   IMAGE_NAME: tiny-health-app
   IMAGE_TAR: tiny-health-app.tar
-  ARTIFACT_NAME: tiny-health-app-image
   APP_PORT: "8000"
 
 jobs:
@@ -18,18 +16,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Download the artifact from the build workflow
-      - name: Download build artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: downloaded-image
+      # 1️⃣ Checkout الكود
+      - name: Check out repository
+        uses: actions/checkout@v6
 
-      # 2️⃣ Load the Docker image from the artifact
-      - name: Load Docker image
-        run: docker load --input "downloaded-image/${IMAGE_TAR}"
+      # 2️⃣ Build Docker image من Dockerfile
+      - name: Build Docker image
+        run: |
+          docker build -t "${IMAGE_NAME}:latest" .
 
-      # 3️⃣ Start the container using the exact image from the build
+      # 3️⃣ Start container
       - name: Start container
         run: |
           docker run -d \
@@ -37,21 +33,21 @@ jobs:
             -p "${APP_PORT}:${APP_PORT}" \
             "${IMAGE_NAME}:latest"
 
-      # 4️⃣ Smoke test to ensure the deployed app is responding
+      # 4️⃣ Smoke test للتأكد أن التطبيق شغال
       - name: Smoke test deployed app
         run: |
           for attempt in 1 2 3 4 5; do
             if curl --fail --silent "http://127.0.0.1:${APP_PORT}/health"; then
-              echo "Smoke test passed "
+              echo "Smoke test passed ✅"
               exit 0
             fi
             echo "Waiting for app to become ready..."
             sleep 2
           done
-          echo "Smoke test failed "
+          echo "Smoke test failed ❌"
           exit 1
 
-      # 5️⃣ Clean up container after test
+      # 5️⃣ Clean up: إزالة الـ container بعد الاختبار
       - name: Stop container
         if: always()
         run: docker rm -f tiny-health-container || true
