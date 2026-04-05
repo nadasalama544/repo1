@@ -2,7 +2,7 @@
 
 # Trigger:build workflow
 on:
-  on:
+  
   push:
     branches:
       - '**' 
