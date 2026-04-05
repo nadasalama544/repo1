@@ -49,9 +49,9 @@ jobs:
         run: date
 
 
-  # =========================
+  # =======================
   # Job 2 — Build Artifact
-  # =========================
+  # =======================
   build-artifact:
     runs-on: ubuntu-latest
 
