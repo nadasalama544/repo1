@@ -1,8 +1,13 @@
 name: CI + Build Artifact Workflow
 
 on:
+  push:
+    branches:
+      - main
+
   schedule:
     - cron: "25 10 * * *"
+
   workflow_dispatch:
 
 env:
