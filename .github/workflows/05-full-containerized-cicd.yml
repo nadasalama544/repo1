@@ -2,10 +2,10 @@
 
 # Trigger:build workflow
 on:
-  workflow_run:
-    workflows: ["03 Build Artifact Workflow"]
-    types:
-      - completed
+  on:
+  push:
+    branches:
+      - '**' 
 
 env:
   IMAGE_NAME: tiny-health-app
